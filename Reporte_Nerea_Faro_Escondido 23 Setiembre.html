@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nerea Faro Escondido — Reporte de resultados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0E2A2E;
+    --deep:#13454B;
+    --teal:#2A7F86;
+    --brass:#A9702B;
+    --mist:#E4EAE7;
+    --paper:#F8FAF8;
+    --line:rgba(14,42,46,.16);
+    --muted:rgba(14,42,46,.62);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--mist);color:var(--ink);
+    font-family:'Public Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-size:16px;line-height:1.55;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px 80px}
+
+  header{padding:56px 0 28px;border-bottom:2px solid var(--ink)}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 18px}
+  h1{font-family:'Fraunces',Georgia,serif;font-weight:500;
+    font-size:clamp(38px,7vw,68px);line-height:.98;letter-spacing:-.02em;margin:0 0 26px}
+  h1 em{font-style:italic;font-weight:300;color:var(--deep)}
+  .meta-row{display:flex;flex-wrap:wrap;gap:28px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted)}
+  .meta-row b{display:block;color:var(--ink);font-weight:500;font-size:13px;margin-top:3px}
+
+  /* ---- Selector de periodo ---- */
+  .switcher{
+    position:sticky;top:0;z-index:20;background:var(--mist);
+    padding:14px 0 14px;border-bottom:1px solid var(--line);margin-bottom:0
+  }
+  .switch-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 9px}
+  .seg{display:inline-flex;border:1px solid var(--ink);border-radius:3px;overflow:hidden;background:var(--paper);flex-wrap:wrap}
+  .seg button{
+    appearance:none;border:0;background:transparent;cursor:pointer;
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink);padding:10px 18px;border-right:1px solid var(--line);transition:background .15s,color .15s
+  }
+  .seg button:last-child{border-right:0}
+  .seg button:hover{background:rgba(42,127,134,.12)}
+  .seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+  section{padding-top:56px}
+  h2{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:clamp(26px,4vw,38px);
+    letter-spacing:-.015em;margin:0 0 26px}
+  h3{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--deep);margin:0 0 18px;
+    padding-bottom:9px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:10px}
+  h3 svg{flex:none}
+
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:26px 26px 28px;margin-bottom:20px}
+  .grid{display:grid;gap:20px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:repeat(3,1fr)}
+
+  .kpi{background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:20px}
+  .kpi .val{font-family:'Fraunces',Georgia,serif;font-size:34px;font-weight:500;line-height:1;letter-spacing:-.02em}
+  .kpi .lab{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:9px}
+
+  .hero-figure{display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap}
+  .hero-figure .num{font-family:'Fraunces',Georgia,serif;font-size:clamp(56px,11vw,104px);font-weight:500;
+    line-height:.86;letter-spacing:-.035em}
+  .hero-figure .cap{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);padding-bottom:14px}
+
+  .bars{display:flex;flex-direction:column;gap:13px}
+  .bar-row{display:grid;grid-template-columns:150px 1fr 76px;align-items:center;gap:14px}
+  .bar-lab{font-size:13.5px;font-weight:500}
+  .bar-track{height:12px;background:rgba(14,42,46,.08);border-radius:2px;overflow:hidden}
+  .bar-fill{height:100%;background:var(--deep);border-radius:2px;transition:width .35s ease}
+  .bar-fill.t{background:var(--teal)}
+  .bar-val{font-family:'IBM Plex Mono',monospace;font-size:12.5px;text-align:right;color:var(--muted)}
+  .bar-val b{color:var(--ink);font-weight:500}
+
+  .inv-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:26px 0 30px}
+  .inv-card{border:1px solid var(--line);border-radius:3px;padding:20px 22px;background:#fff;position:relative;overflow:hidden}
+  .inv-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
+  .inv-card.meta:before{background:var(--teal)}
+  .inv-card.google:before{background:var(--brass)}
+  .inv-head{display:flex;align-items:center;gap:9px;margin-bottom:14px}
+  .inv-head span{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--muted)}
+  .inv-amt{font-family:'Fraunces',Georgia,serif;font-size:clamp(30px,5.4vw,44px);font-weight:500;
+    line-height:1;letter-spacing:-.025em}
+  .inv-pct{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);margin-top:10px}
+  .inv-pct b{color:var(--ink);font-weight:500}
+
+  .stack-bar{display:flex;height:34px;border-radius:3px;overflow:hidden}
+  .stack-seg{transition:flex-grow .35s ease}
+  .stack-seg.meta{background:var(--teal)}
+  .stack-seg.google{background:var(--brass)}
+  .stack-scale{display:flex;justify-content:space-between;margin-top:7px;
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted)}
+  .stack-legend{display:flex;gap:20px;margin-top:14px;font-family:'IBM Plex Mono',monospace;
+    font-size:11px;color:var(--muted);flex-wrap:wrap}
+  .stack-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:7px;vertical-align:-1px}
+  .stack-legend i.m{background:var(--teal)}
+  .stack-legend i.g{background:var(--brass)}
+
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);text-align:left;font-weight:500;padding:0 0 9px;border-bottom:1px solid var(--line)}
+  td{padding:11px 0;border-bottom:1px solid rgba(14,42,46,.08)}
+  td:last-child,th:last-child{text-align:right}
+  tr:last-child td{border-bottom:none}
+  .mono{font-family:'IBM Plex Mono',monospace;font-size:13px}
+
+  footer{margin-top:64px;padding-top:22px;border-top:1px solid var(--line);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+  @media (max-width:760px){
+    .g2,.g3{grid-template-columns:1fr 1fr}
+    .inv-grid{grid-template-columns:1fr}
+    .bar-row{grid-template-columns:120px 1fr 66px;gap:10px}
+    .seg button{padding:9px 13px;font-size:10.5px}
+  }
+  @media (max-width:460px){.g3{grid-template-columns:1fr}}
+  @media print{
+    body{background:#fff}
+    .wrap{max-width:none;padding:0 12mm 12mm}
+    .switcher{position:static}
+    section{page-break-inside:avoid;padding-top:34px}
+    .card,.kpi{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">Reporte de resultados · Campañas digitales</p>
+    <h1>Nerea<br><em>Faro Escondido</em></h1>
+    <div class="meta-row">
+      <div>Periodo<b id="m-periodo">15 jul — 23 set 2026</b></div>
+      <div>Inversión total<b id="m-inv">$4.336,67 USD</b></div>
+      <div>Leads en CRM<b id="m-leads">38 tratos</b></div>
+      <div>Fuentes<b>Pipedrive · Meta · Google Ads</b></div>
+    </div>
+  </header>
+
+  <div class="switcher">
+    <p class="switch-label">Periodo a visualizar</p>
+    <div class="seg" role="group" aria-label="Seleccionar periodo">
+      <button type="button" data-p="tot" aria-pressed="true">Total</button>
+      <button type="button" data-p="jul" aria-pressed="false">Julio</button>
+      <button type="button" data-p="ago" aria-pressed="false">Agosto</button>
+      <button type="button" data-p="sep" aria-pressed="false">Setiembre</button>
+    </div>
+  </div>
+
+  <!-- ============ LEADS ============ -->
+  <section>
+    <h2>Leads en Pipedrive</h2>
+
+    <div class="card">
+      <div class="hero-figure">
+        <div class="num" id="l-total">38</div>
+        <div class="cap">Leads generados</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Etapa en la que se encuentra cada lead</h3>
+      <div class="bars" id="bars-etapas"></div>
+    </div>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>¿Cómo llegó?</h3>
+        <div class="bars" id="bars-llego"></div>
+      </div>
+      <div class="card">
+        <h3>Fuente</h3>
+        <div class="bars" id="bars-fuente"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PAUTA ============ -->
+  <section>
+    <h2>Resultados de pauta</h2>
+
+    <div class="card">
+      <h3>Inversión total del periodo</h3>
+      <div class="hero-figure">
+        <div class="num" id="i-total">$4.336<span style="font-size:.42em;letter-spacing:0">,67</span></div>
+        <div class="cap">USD</div>
+      </div>
+
+      <div class="inv-grid">
+        <div class="inv-card meta">
+          <div class="inv-head">
+            <svg width="26" height="16" viewBox="0 0 36 20" aria-hidden="true">
+              <path d="M4 12c0-5 2.7-8 6-8 4 0 6 5 8 8s4 8 8 8c3.3 0 6-3 6-8s-2.7-8-6-8c-4 0-6 5-8 8s-4 8-8 8c-3.3 0-6-3-6-8z"
+                    fill="none" stroke="#0081FB" stroke-width="2.6" stroke-linecap="round"/>
+            </svg>
+            <span>Meta</span>
+          </div>
+          <div class="inv-amt" id="i-meta">$1.360,52</div>
+          <div class="inv-pct"><b id="i-meta-pct">31,4%</b> de la inversión</div>
+        </div>
+        <div class="inv-card google">
+          <div class="inv-head">
+            <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+              <path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.2-.4-4.7H24v9h11.9c-.5 2.8-2.1 5.1-4.4 6.7v5.5h7.1c4.2-3.8 6.5-9.5 6.5-16.5z"/>
+              <path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.6-5.3l-7.1-5.5c-2 1.3-4.5 2.1-7.5 2.1-5.7 0-10.6-3.9-12.3-9.1H4.3v5.7C8 41.3 15.4 46 24 46z"/>
+              <path fill="#FBBC05" d="M11.7 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.3C2.8 17.1 2 20.4 2 24s.8 6.9 2.3 9.9l7.4-5.7z"/>
+              <path fill="#EA4335" d="M24 10.7c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.1 29.9 2 24 2 15.4 2 8 6.7 4.3 14.1l7.4 5.7c1.7-5.2 6.6-9.1 12.3-9.1z"/>
+            </svg>
+            <span>Google Ads</span>
+          </div>
+          <div class="inv-amt" id="i-google">$2.976,15</div>
+          <div class="inv-pct"><b id="i-google-pct">68,6%</b> de la inversión</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="stack-bar">
+          <div class="stack-seg meta" id="seg-meta" style="flex:31.4"></div>
+          <div class="stack-seg google" id="seg-google" style="flex:68.6"></div>
+        </div>
+        <div class="stack-scale"><span>0%</span><span>50%</span><span>100%</span></div>
+        <div class="stack-legend">
+          <span><i class="m"></i><span id="leg-meta">Meta · $1.360,52 · 31,4%</span></span>
+          <span><i class="g"></i><span id="leg-google">Google Ads · $2.976,15 · 68,6%</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- META -->
+    <div class="card">
+      <h3>
+        <svg width="26" height="16" viewBox="0 0 36 20" aria-hidden="true">
+          <path d="M4 12c0-5 2.7-8 6-8 4 0 6 5 8 8s4 8 8 8c3.3 0 6-3 6-8s-2.7-8-6-8c-4 0-6 5-8 8s-4 8-8 8c-3.3 0-6-3-6-8z"
+                fill="none" stroke="#0081FB" stroke-width="2.6" stroke-linecap="round"/>
+        </svg>
+        Meta — Facebook e Instagram
+      </h3>
+      <div class="grid g3" style="margin-bottom:24px">
+        <div class="kpi"><div class="val" id="mk-gasto">$1.360,52</div><div class="lab">Importe gastado</div></div>
+        <div class="kpi"><div class="val" id="mk-impr">168.148</div><div class="lab">Impresiones</div></div>
+        <div class="kpi"><div class="val" id="mk-alc">60.149</div><div class="lab">Alcance</div></div>
+      </div>
+      <table>
+        <thead><tr><th>Métrica</th><th>Resultado</th></tr></thead>
+        <tbody>
+          <tr><td>Formularios de clientes potenciales en el sitio web</td><td class="mono" id="mt-form">3</td></tr>
+          <tr><td>Clics a WhatsApp en el sitio web</td><td class="mono" id="mt-wa">539</td></tr>
+          <tr><td>Frecuencia</td><td class="mono" id="mt-frec">2,80</td></tr>
+          <tr><td>Clics en el enlace</td><td class="mono" id="mt-clics">7.593</td></tr>
+          <tr><td>Visitas a la página de destino</td><td class="mono" id="mt-vis">5.628</td></tr>
+          <tr><td>CTR</td><td class="mono" id="mt-ctr">4,52%</td></tr>
+          <tr><td>CPC</td><td class="mono" id="mt-cpc">$0,18</td></tr>
+          <tr><td>CPM</td><td class="mono" id="mt-cpm">$8,09</td></tr>
+          <tr><td>Costo por formulario de cliente potencial</td><td class="mono" id="mt-cpf">$453,51</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- GOOGLE -->
+    <div class="card">
+      <h3>
+        <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.2-.4-4.7H24v9h11.9c-.5 2.8-2.1 5.1-4.4 6.7v5.5h7.1c4.2-3.8 6.5-9.5 6.5-16.5z"/>
+          <path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.6-5.3l-7.1-5.5c-2 1.3-4.5 2.1-7.5 2.1-5.7 0-10.6-3.9-12.3-9.1H4.3v5.7C8 41.3 15.4 46 24 46z"/>
+          <path fill="#FBBC05" d="M11.7 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.3C2.8 17.1 2 20.4 2 24s.8 6.9 2.3 9.9l7.4-5.7z"/>
+          <path fill="#EA4335" d="M24 10.7c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.1 29.9 2 24 2 15.4 2 8 6.7 4.3 14.1l7.4 5.7c1.7-5.2 6.6-9.1 12.3-9.1z"/>
+        </svg>
+        Google Ads
+      </h3>
+      <div class="grid g3" style="margin-bottom:24px">
+        <div class="kpi"><div class="val" id="gk-costo">$2.976,15</div><div class="lab">Costo</div></div>
+        <div class="kpi"><div class="val" id="gk-impr">27.646</div><div class="lab">Impresiones</div></div>
+        <div class="kpi"><div class="val" id="gk-clics">1.421</div><div class="lab">Clics</div></div>
+      </div>
+      <table>
+        <thead><tr><th>Métrica</th><th>Resultado</th></tr></thead>
+        <tbody>
+          <tr><td>Formularios de clientes potenciales en el sitio web</td><td class="mono" id="gt-form">12</td></tr>
+          <tr><td>Clics a WhatsApp en el sitio web</td><td class="mono" id="gt-wa">62</td></tr>
+          <tr><td>CTR</td><td class="mono" id="gt-ctr">5,14%</td></tr>
+          <tr><td>CPC</td><td class="mono" id="gt-cpc">$2,09</td></tr>
+          <tr><td>CPM</td><td class="mono" id="gt-cpm">$107,65</td></tr>
+          <tr><td>Costo por formulario de cliente potencial</td><td class="mono" id="gt-cpf">$248,01</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <span>Nerea · Faro Escondido — Reporte 15 jul / 23 set 2026</span>
+    <span>Fuentes: Pipedrive · Meta Ads · Google Ads</span>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var DATA = {
+    tot:{ periodo:"15 jul — 23 set 2026",
+      leads:{total:38, etapas:{"En contacto":13,"Contactado":9,"Perdidos":16}, fuente:{"WhatsApp":23,"Sitio Web Proyecto":15}},
+      meta:{gasto:1360.52, impr:168148, alcance:60149, form:3, wa:539, clics:7593, visitas:5628},
+      google:{costo:2976.15, impr:27646, clics:1421, form:12, wa:62} },
+    jul:{ periodo:"15 — 31 jul 2026",
+      leads:{total:4, etapas:{"En contacto":2,"Contactado":0,"Perdidos":2}, fuente:{"WhatsApp":0,"Sitio Web Proyecto":4}},
+      meta:{gasto:551.39, impr:110470, alcance:38751, form:2, wa:77, clics:2405, visitas:1769},
+      google:{costo:421.29, impr:7659, clics:295, form:2, wa:5} },
+    ago:{ periodo:"1 — 31 ago 2026",
+      leads:{total:27, etapas:{"En contacto":8,"Contactado":8,"Perdidos":11}, fuente:{"WhatsApp":19,"Sitio Web Proyecto":8}},
+      meta:{gasto:709.39, impr:43873, alcance:15888, form:1, wa:388, clics:4435, visitas:3260},
+      google:{costo:1321.27, impr:13065, clics:620, form:7, wa:26} },
+    sep:{ periodo:"1 — 23 set 2026",
+      leads:{total:7, etapas:{"En contacto":3,"Contactado":1,"Perdidos":3}, fuente:{"WhatsApp":4,"Sitio Web Proyecto":3}},
+      meta:{gasto:99.74, impr:13805, alcance:5510, form:0, wa:74, clics:753, visitas:599},
+      google:{costo:1233.59, impr:6922, clics:506, form:3, wa:31} }
+  };
+
+  function nf(n, dec){
+    if(n===null||n===undefined||!isFinite(n)) return "—";
+    return n.toLocaleString('es-CR',{minimumFractionDigits:dec||0, maximumFractionDigits:dec||0});
+  }
+  function money(n){ return (n===null||!isFinite(n)) ? "—" : "$"+nf(n,2); }
+  function pct(n){ return (n===null||!isFinite(n)) ? "—" : nf(n,2)+"%"; }
+  function set(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
+  function div(a,b){ return b ? a/b : null; }
+
+  function bars(container, obj, total, cls){
+    var el=document.getElementById(container);
+    var keys=Object.keys(obj);
+    var max=Math.max.apply(null, keys.map(function(k){return obj[k];})) || 1;
+    el.innerHTML = keys.map(function(k){
+      var v=obj[k];
+      var w=(v/max*100);
+      var p= total ? Math.round(v/total*100) : 0;
+      return '<div class="bar-row"><span class="bar-lab">'+k+'</span>'+
+             '<span class="bar-track"><span class="bar-fill '+(cls||'')+'" style="width:'+w.toFixed(1)+'%"></span></span>'+
+             '<span class="bar-val"><b>'+v+'</b> · '+p+'%</span></div>';
+    }).join('');
+  }
+
+  function render(p){
+    var d=DATA[p], m=d.meta, g=d.google, L=d.leads;
+    var inv=m.gasto+g.costo;
+    var mp=inv? m.gasto/inv*100 : 0, gp=inv? g.costo/inv*100 : 0;
+
+    set('m-periodo', d.periodo);
+    set('m-inv', money(inv)+" USD");
+    set('m-leads', L.total+" tratos");
+
+    set('l-total', L.total);
+    bars('bars-etapas', L.etapas, L.total, 't');
+    bars('bars-llego', {"Gestión propia":L.total}, L.total, '');
+    bars('bars-fuente', L.fuente, L.total, '');
+
+    var im=money(inv).split(',');
+    document.getElementById('i-total').innerHTML = im[0]+'<span style="font-size:.42em;letter-spacing:0">,'+im[1]+'</span>';
+    set('i-meta', money(m.gasto));      set('i-meta-pct', nf(mp,1)+"%");
+    set('i-google', money(g.costo));    set('i-google-pct', nf(gp,1)+"%");
+    document.getElementById('seg-meta').style.flex = mp;
+    document.getElementById('seg-google').style.flex = gp;
+    set('leg-meta', "Meta · "+money(m.gasto)+" · "+nf(mp,1)+"%");
+    set('leg-google', "Google Ads · "+money(g.costo)+" · "+nf(gp,1)+"%");
+
+    set('mk-gasto', money(m.gasto));
+    set('mk-impr', nf(m.impr));
+    set('mk-alc', nf(m.alcance));
+    set('mt-form', nf(m.form));
+    set('mt-wa', nf(m.wa));
+    set('mt-frec', nf(div(m.impr,m.alcance),2));
+    set('mt-clics', nf(m.clics));
+    set('mt-vis', nf(m.visitas));
+    set('mt-ctr', pct(div(m.clics,m.impr)*100));
+    set('mt-cpc', money(div(m.gasto,m.clics)));
+    set('mt-cpm', money(div(m.gasto,m.impr)*1000));
+    set('mt-cpf', m.form ? money(m.gasto/m.form) : "—");
+
+    set('gk-costo', money(g.costo));
+    set('gk-impr', nf(g.impr));
+    set('gk-clics', nf(g.clics));
+    set('gt-form', nf(g.form));
+    set('gt-wa', nf(g.wa));
+    set('gt-ctr', pct(div(g.clics,g.impr)*100));
+    set('gt-cpc', money(div(g.costo,g.clics)));
+    set('gt-cpm', money(div(g.costo,g.impr)*1000));
+    set('gt-cpf', g.form ? money(g.costo/g.form) : "—");
+  }
+
+  var btns=document.querySelectorAll('.seg button');
+  Array.prototype.forEach.call(btns, function(b){
+    b.addEventListener('click', function(){
+      Array.prototype.forEach.call(btns, function(x){ x.setAttribute('aria-pressed','false'); });
+      b.setAttribute('aria-pressed','true');
+      render(b.getAttribute('data-p'));
+    });
+  });
+
+  render('tot');
+})();
+</script>
+</body>
+</html>
